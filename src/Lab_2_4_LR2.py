@@ -66,9 +66,19 @@ class LinearRegressor:
         """
         # Replace this code with the code you did in the previous laboratory session
 
-        # Store the intercept and the coefficients of the model
-        self.intercept = None
-        self.coefficients = None
+        # Add a column of ones to the input data matrix X for the intercept term
+        # column_intercept = np.ones((X.shape[0], 1))
+        # X = np.hstack((column_intercept, X))
+
+        # # Calculate the coefficients using the normal equation
+        X_transpose = np.transpose(X)
+        
+        beta = np.linalg.inv(X_transpose @ X) @ X_transpose @ y
+
+        # Separate the intercept and the coefficients
+        beta = np.transpose(beta)
+        self.intercept = beta[0]
+        self.coefficients = beta[1:]
 
     def fit_gradient_descent(self, X, y, learning_rate=0.01, iterations=1000):
         """
@@ -93,12 +103,12 @@ class LinearRegressor:
 
         # Implement gradient descent (TODO)
         for epoch in range(iterations):
-            predictions = None
+            predictions = self.predict(X)
             error = predictions - y
 
             # TODO: Write the gradient values and the updates for the paramenters
-            gradient = None
-            self.intercept -= None
+            gradient = (1/m)*np.sum(error*X)
+            self.intercept -= learning_rate * gradient
             self.coefficients -= None
 
             # TODO: Calculate and print the loss every 10 epochs
@@ -122,11 +132,19 @@ class LinearRegressor:
         """
 
         # Paste your code from last week
-
+        
+        if self.coefficients is None or self.intercept is None:
+            raise ValueError("Model is not yet fitted")
         if self.coefficients is None or self.intercept is None:
             raise ValueError("Model is not yet fitted")
 
-        return None
+        if np.ndim(X) == 1:
+            # TODO: Predict when X is only one variable
+            predictions = self.intercept + self.coefficients * X
+        else:
+            # TODO: Predict when X is more than one variable
+            predictions = self.intercept + X @ self.coefficients
+        return predictions
 
 
 def evaluate_regression(y_true, y_pred):
