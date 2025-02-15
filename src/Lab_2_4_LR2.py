@@ -67,8 +67,8 @@ class LinearRegressor:
         # Replace this code with the code you did in the previous laboratory session
 
         # Add a column of ones to the input data matrix X for the intercept term
-        # column_intercept = np.ones((X.shape[0], 1))
-        # X = np.hstack((column_intercept, X))
+        #column_intercept = np.ones((X.shape[0], 1))
+        #X = np.hstack((column_intercept, X))
 
         # # Calculate the coefficients using the normal equation
         X_transpose = np.transpose(X)
@@ -76,7 +76,7 @@ class LinearRegressor:
         beta = np.linalg.inv(X_transpose @ X) @ X_transpose @ y
 
         # Separate the intercept and the coefficients
-        beta = np.transpose(beta)
+        #beta = np.transpose(beta)
         self.intercept = beta[0]
         self.coefficients = beta[1:]
 
@@ -160,16 +160,18 @@ def evaluate_regression(y_true, y_pred):
     """
 
     # R^2 Score
-    # TODO
-    r_squared = None
+    # TODO: Calculate R^2
+    rss = np.sum((y_true - y_pred)**2)
+    tss = np.sum((y_true - np.mean(y_true))**2)
+    r_squared = 1 - rss/tss
 
     # Root Mean Squared Error
-    # TODO
-    rmse = None
+    # TODO: Calculate RMSE
+    rmse = np.sqrt(np.sum((y_true - y_pred)**2) / len(y_true))
 
     # Mean Absolute Error
-    # TODO
-    mae = None
+    # TODO: Calculate MAE
+    mae = np.sum(np.abs(y_true - y_pred)) / len(y_true)
 
     return {"R2": r_squared, "RMSE": rmse, "MAE": mae}
 
