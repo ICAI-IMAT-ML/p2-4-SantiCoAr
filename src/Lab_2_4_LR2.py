@@ -100,7 +100,7 @@ class LinearRegressor:
 
         for epoch in range(iterations):
             theta = np.hstack([self.intercept, self.coefficients])
-
+            
             predictions = X @ theta # X ya contiene 1s
 
             error = predictions - y
